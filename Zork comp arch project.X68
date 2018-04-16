@@ -131,9 +131,12 @@ valley:
     MOVE.B #4, D0           take input (1 or 2)
     TRAP #15
 
-    CMP #1,D1
-    BEQ camp
-    BLT nighttravel
+    CMP #2,D1
+    BEQ nighttravel
+    BLT camp
+
+
+    bsr replay
 
 *--------------------------------------------------------
 camp:
@@ -148,9 +151,11 @@ camp:
 nighttravel:
     bsr     clear_screen    clears the screen         
     
-   * LEA , A1    displays the message
+    LEA nighttravelmsglamp, A1    displays the message
     MOVE.B  #14,D0
     TRAP #15
+    
+    bsr replay
 
     
 *-------------------------------------------------------
@@ -464,8 +469,14 @@ camp_msg:       dc.b    'You set up camp near a river and refill your water supp
                 dc.b    'asleep easily after a long day of walking.....'
                 dc.b    $0D,$0A 
                 dc.b    'You wake up feeling fresh, you pack up and head on with your journey.'
+                dc.b    $0D,$0A,0
                
-nighttravelmsglamp: dc.b    'You travel '
+nighttravelmsglamp: dc.b    'You travel through the night but your lamp breaks, alone in the'
+                dc.b    $0D,$0A 
+                dc.b    'dark you wander off a steep hill and break your leg, with nobody around'
+                dc.b    $0D,$0A 
+                dc.b    'to help you, you eventually die. Game Over.'
+
                
 feed_msg:       dc.b    'Feed load (each horse needs at least 100 units of feed)'
                 dc.b    $0D,$0A
@@ -501,6 +512,7 @@ health:     ds.w    1
 score:      ds.w    1 reserve space for score
 
     end start
+
 
 
 
